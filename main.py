@@ -1,11 +1,22 @@
-def debt_left(credit_value: int, interest: float, installment: int, inflation_table: list):
+def debt_left(credit_value: int, interest: float, installment: int,
+              inflation_table: list):
     debt = [credit_value]
     for month, inflation in enumerate(inflation_table):
-        # print(f"debt {month} = >{debt[month]}<")
-        payment = (1 + ((inflation + interest) / (credit_value / 10))) * debt[month] - installment
+        payment = (1 + ((inflation + interest) / (credit_value / 10))) * debt[
+            month] - installment
         debt.append(payment)
 
-    return debt
+    return debt[1:]
+
+def message(debt: list):
+    for month, d in enumerate(debt):
+        if d == debt[0]:
+            paid_off = credit_value - d
+        else:
+            paid_off = debt[month - 1] - d
+        print(f"Twoja pozostała kwota kredytu to {d}, to {paid_off} mniej niż w poprzednim miesiącu.")
+
+
 
 
 if __name__ == '__main__':
@@ -38,6 +49,8 @@ if __name__ == '__main__':
     interest = float(input("Oprocentowanie: "))
     installment = int(input("Stała rata: "))
 
-    print(debt_left(credit_value, interest, installment, inflation_table))
+    debt = debt_left(credit_value, interest, installment, inflation_table)
+
+    message(debt)
 
 
